@@ -4,3 +4,21 @@ span {
 span .name {
     font-weight:bold;
 }
+div .podium {
+float:left;
+position:absolute;
+bottom:0px;
+font-weight:bold;font-size:18px;
+vertical-align:bottom;
+}
+div .podium#first{
+    left:120px;
+    width:100px;
+}
+div .podium#second{
+    width:100px;
+}
+div .podium#third { 
+    left:220px;
+    width:100px;
+}

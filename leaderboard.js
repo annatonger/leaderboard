@@ -18,7 +18,7 @@ initial.forEach(lines,function(line,idx,lib) {
         accounts.push({username:columns[0],address:columns[2],totalvalue:0}) 
     lib.done()
 },function() {
-    accounts = accounts.slice(0,4)
+    //accounts = accounts.slice(0,4)
     gettingbalances(0)
 })
 
@@ -80,7 +80,7 @@ function getexchange(value, basecurrency, baseissuer,callback){
 var hour = 1000*60*60
 var timerid = setInterval(function() {
     gettingbalances(0)    
-}, hour*3)
+}, hour)
 var getSorted = function() {
     return sorted;
 }
@@ -90,6 +90,6 @@ var recalculate = function() {
     gettingbalances(0)
     timerid = setInterval(function() {
         gettingbalances(0)    
-    }, hour*3)
+    }, hour)
 }
 exports.recalculate = recalculate;
