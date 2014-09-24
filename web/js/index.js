@@ -25,4 +25,8 @@ $(window).ready(function() {
     .error(function(error) {
         console.log(error)
     })
+    $.getJSON(url+'nextTime')
+    .done(function(time) {
+        $('#nextUpdate').html("Next update at " +new Date(time))
+    })
 })

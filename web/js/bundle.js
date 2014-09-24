@@ -733,6 +733,10 @@ $(window).ready(function() {
     .error(function(error) {
         console.log(error)
     })
+    $.getJSON(url+'nextTime')
+    .done(function(time) {
+        $('#nextUpdate').html("Next update at " +new Date(time))
+    })
 })
 
 },{"queuelib":1}],5:[function(require,module,exports){

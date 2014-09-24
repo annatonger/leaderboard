@@ -14,13 +14,17 @@ var server = http.createServer(function(req,res) {
     switch (req.url) {
         case '/getSorted' :
             response.json(leaderboard.getSorted()).pipe(res) 
-        break;
+            break;
         case '/recalculate' :
             leaderboard.recalculate()
             response.json({ok:true}).pipe(res)
+            break;
+        case '/nextTime' : 
+            response.json(leaderboard.nextTime()).pipe(res)
+            break;
         default:
             ecstatic(req,res)
-        break;
+            break;
     }
 })
 server.listen(argv.p)

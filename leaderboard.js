@@ -18,7 +18,7 @@ initial.forEach(lines,function(line,idx,lib) {
         accounts.push({username:columns[0],address:columns[2],totalvalue:0}) 
     lib.done()
 },function() {
-    //accounts = accounts.slice(0,4)
+//    accounts = accounts.slice(0,11)
     gettingbalances(0)
 })
 
@@ -27,6 +27,7 @@ function gettingbalances (i) {
     if (accounts[i].address.length)
 request("http://localhost:5990/v1/accounts/"+accounts[i].address+"/balances", function(error,response,body){
     body=JSON.parse(body)
+    console.log(body.balances)
     accounts[i].balances=body.balances
     if (i<accounts.length-1)
         gettingbalances(i+1)
@@ -40,7 +41,7 @@ request("http://localhost:5990/v1/accounts/"+accounts[i].address+"/balances", fu
                 } else if (balance.value!="0") {
                     getexchange(parseFloat(balance.value),
                     balance.currency,balance.counterparty,
-                        function(balancevalue,name){
+                        function(balancevalue){
                             account.totalvalue+=balancevalue
                             lib2.done()
                     })
@@ -61,6 +62,7 @@ request("http://localhost:5990/v1/accounts/"+accounts[i].address+"/balances", fu
 }
 
 function getexchange(value, basecurrency, baseissuer,callback){
+//    console.log("getexchange:",value,basecurrency,baseissuer)
 	request.post({
 		url:"http://api.ripplecharts.com/api/exchange_rates",
 		json: {
@@ -73,12 +75,20 @@ function getexchange(value, basecurrency, baseissuer,callback){
 			]
 		}},
 		function(error,response,body){
-			callback(value*body[0].rate,"anna")
+            console.log(body) 
+            if (body.length)
+                callback(value*body[0].rate)
+            else 
+                callback(0)
 		}
 	)
 }
+var currTime = new Date().getTime()
 var hour = 1000*60*60
+var next = currTime + hour;
 var timerid = setInterval(function() {
+    currTime = new Date().getTime()
+    next = currTime + hour;
     gettingbalances(0)    
 }, hour)
 var getSorted = function() {
@@ -89,7 +99,13 @@ var recalculate = function() {
     clearInterval(timerid);    
     gettingbalances(0)
     timerid = setInterval(function() {
+        currTime = new Date().getTime()
+        next = currTime + hour;
         gettingbalances(0)    
     }, hour)
 }
 exports.recalculate = recalculate;
+var nextTime = function() {
+    return next
+}
+exports.nextTime = nextTime;
