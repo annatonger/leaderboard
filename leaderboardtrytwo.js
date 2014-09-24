@@ -6,7 +6,7 @@ var addresses = ["rKRWe49WhaVcCgp6L5ZDsWMagZzDvw3P9S", "rhgQGpna3XAmstXsq6gSbq3R
 //take each item in the addresses list, and push them into the accounts list. 
 //name each item address 
 addresses.forEach(function(item){
-	accounts.push ({address:item})
+	accounts.push ({address:item,totalvalue:0})
 })
 
 //print out the addresses
@@ -14,6 +14,9 @@ console.log(accounts)
 
 //install the request module
 var request = require("request");
+var Q = require ("queuelib")
+var q = new Q
+var q2 = new Q
 //function that starts with "i
 
 var gettingbalances=function(i){
@@ -26,10 +29,56 @@ var gettingbalances=function(i){
 				gettingbalances(i+1)
 			else {
 				console.log("done")
-	//do the conversion
-	convert(0)
-}
-});
+				q.forEach(accounts,function(account,idx,lib){
+					console.log(account,idx)
+					q2.forEach(account.balances,function(balance,idx2,lib2){
+						console.log(balance,idx2)
+						if (balance.currency=="XRP") {
+							console.log (balance,idx2)
+							account.totalvalue+=parseFloat(balance.value)
+							lib2.done()	
+						}
+						else if (balance.value!="0") {
+							getexchange(parseFloat(balance.value),
+							balance.currency,balance.counterparty,
+							function(balancevalue,name){
+								account.totalvalue+=balancevalue
+								console.log (balance,idx2)
+								lib2.done()
+							})
+						}
+
+				},function(){console.log ("all done with balances")})
+				lib.done()
+				},function(){
+					console.log ("all done\n\n\n\n")
+					console.log (accounts)
+				})
+
+
+				//do the conversion
+				/*
+				accounts.forEach(function(account,account_idx){
+					account.balances.forEach(function(balance,balance_idx){
+						if (balance.currency=="XRP") {
+							console.log (balance,balance_idx)
+							account.totalvalue+=parseFloat(balance.value)
+						}
+						else if (balance.value!="0") {
+							getexchange(parseFloat(balance.value),
+							balance.currency,balance.counterparty,
+							function(balancevalue,name){
+								account.totalvalue+=balancevalue
+								console.log (balance,balance_idx)
+							})
+						}
+					})
+					
+				})
+*/
+				
+			}
+	});
 }
 gettingbalances(0);
 
@@ -38,35 +87,29 @@ gettingbalances(0);
 //for each balance, look up the value of each balance in XRP, if not XRP
 //add the balances together
 
-var nonXRPvalue=[]
-
-var getexchange=function(base, baseissuer){
+function getexchange(value, basecurrency, baseissuer,callback){
 	request.post({
 		url:"http://api.ripplecharts.com/api/exchange_rates",
 		json: {
 			pairs : [
 			{
-				base : {currency:base, "issuer":baseissuer},
+				base : {currency:basecurrency, "issuer":baseissuer},
 				counter : {currency:"XRP"}
 
 			}
 			]
 		}},
 		function(error,response,body){
-			//console.log (obj.rate, "sexybody");
-
-		//	console.log (body.rate);
-			var obj = body[0]
-			nonXRPvalue.push(obj.value)
-			console.log (body, "sexybody")
-			console.log (obj.rate, "sexyrate")
-			return Number(obj.rate)
+			console.log("value",value, "rate", body[0].rate, "totalvalue", value*body[0].rate)
+			callback(value*body[0].rate,"anna")
 		}
-		)
+	)
 }
 
 
 
+
+/*
 var convert=function(){
 	accounts.forEach(function(account){
 
@@ -74,19 +117,14 @@ var convert=function(){
 
 			if (object.currency != "XRP") {
 
-				console.log(getexchange(object.currency,object.counterparty), "convertedbalance")
+				getexchange(parseFloat(object.value), object.currency,object.counterparty)
 
 			}
 		})
 	})
 }
 
-setTimeout(function(){
-	console.log('accccccounts', accounts[1].balances);
-	console.log('sexybalance',nonXRPvalue)
-}, 2000);
-
-
+*/
 
 
 
