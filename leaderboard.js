@@ -90,7 +90,10 @@ var next = currTime + hour;
 var timerid = setInterval(function() {
     currTime = new Date().getTime()
     next = currTime + hour;
-    accounts = []
+    for (var i = 0; i < accounts.length; i++) {
+        var acc = accounts[i];
+        acc.totalvalue = 0;
+    }
     gettingbalances(0)    
 }, hour)
 var getSorted = function() {
@@ -103,7 +106,10 @@ var recalculate = function() {
     timerid = setInterval(function() {
         currTime = new Date().getTime()
         next = currTime + hour;
-        accounts = []
+        for (var i = 0; i < accounts.length; i++) {
+            var acc = accounts[i];
+            acc.totalvalue = 0;
+        }
         gettingbalances(0)    
     }, hour)
 }
