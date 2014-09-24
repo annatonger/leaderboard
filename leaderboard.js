@@ -53,8 +53,9 @@ request("http://localhost:5990/v1/accounts/"+accounts[i].address+"/balances", fu
             })
         },
         function(){
+            fs.writeFileSync('accounts.json',JSON.stringify(accounts))
             sorted = accounts.sort(function(a,b) {
-                return a.totalvalue < b.totalvalue
+                return b.totalvalue - a.totalvalue
             })
         })
     }
