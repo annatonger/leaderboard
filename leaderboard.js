@@ -77,7 +77,7 @@ function getexchange(value, basecurrency, baseissuer,callback){
 		}},
 		function(error,response,body){
             console.log(body) 
-            if (body.length)
+            if (body && body.length)
                 callback(value*body[0].rate)
             else 
                 callback(0)
@@ -90,6 +90,7 @@ var next = currTime + hour;
 var timerid = setInterval(function() {
     currTime = new Date().getTime()
     next = currTime + hour;
+    accounts = []
     gettingbalances(0)    
 }, hour)
 var getSorted = function() {
@@ -102,6 +103,7 @@ var recalculate = function() {
     timerid = setInterval(function() {
         currTime = new Date().getTime()
         next = currTime + hour;
+        accounts = []
         gettingbalances(0)    
     }, hour)
 }
