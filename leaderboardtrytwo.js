@@ -9,9 +9,6 @@ addresses.forEach(function(item){
 	accounts.push ({address:item,totalvalue:0})
 })
 
-//print out the addresses
-console.log(accounts)
-
 //install the request module
 var request = require("request");
 var Q = require ("queuelib")
@@ -22,7 +19,6 @@ var q2 = new Q
 var gettingbalances=function(i){
 	request("http://localhost:5990/v1/accounts/"+accounts[i].address+"/balances", 
 		function(error,response,body){
-			console.log (body);
 			body=JSON.parse(body)
 			accounts[i].balances=body.balances
 			if (i<accounts.length-1)
@@ -30,29 +26,33 @@ var gettingbalances=function(i){
 			else {
 				console.log("done")
 				q.forEach(accounts,function(account,idx,lib){
-					console.log(account,idx)
+					console.log("account",account,idx)
 					q2.forEach(account.balances,function(balance,idx2,lib2){
-						console.log(balance,idx2)
+						console.log("balance",balance,idx2+" / "+(account.balances.length-1))
 						if (balance.currency=="XRP") {
-							console.log (balance,idx2)
 							account.totalvalue+=parseFloat(balance.value)
 							lib2.done()	
+							console.log(idx2,account.balances.length-1)
+							if (idx2==account.balances.length-1)
+								lib.done()
 						}
 						else if (balance.value!="0") {
 							getexchange(parseFloat(balance.value),
 							balance.currency,balance.counterparty,
 							function(balancevalue,name){
 								account.totalvalue+=balancevalue
-								console.log (balance,idx2)
 								lib2.done()
+								console.log(idx2,account.balances.length-1)
+								if (idx2==account.balances.length-1)
+								lib.done()
 							})
 						}
 
 				},function(){console.log ("all done with balances")})
-				lib.done()
+					
 				},function(){
 					console.log ("all done\n\n\n\n")
-					console.log (accounts)
+				//	console.log (accounts)
 				})
 
 
@@ -100,7 +100,7 @@ function getexchange(value, basecurrency, baseissuer,callback){
 			]
 		}},
 		function(error,response,body){
-			console.log("value",value, "rate", body[0].rate, "totalvalue", value*body[0].rate)
+			//console.log("value",value, "rate", body[0].rate, "totalvalue", value*body[0].rate)
 			callback(value*body[0].rate,"anna")
 		}
 	)
