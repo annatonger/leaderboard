@@ -18,7 +18,7 @@ initial.forEach(lines,function(line,idx,lib) {
         accounts.push({username:columns[0],address:columns[2],totalvalue:0}) 
     lib.done()
 },function() {
-//    accounts = accounts.slice(0,11)
+    accounts = accounts.slice(0,11)
     gettingbalances(0)
 })
 

@@ -720,6 +720,13 @@ $(window).ready(function() {
         var os = "<ol>";
         q.forEach(list,function(account,idx,lib) {
             os += "<li><div class='account'>";
+            os += "<div class='balances'><div>"+account.username+"'s holdings</div>";
+            for (var i = 0; i < account.balances.length; i++) {
+                var balance = account.balances[i];
+                os += "<div><span class='currency'>"+balance.currency+"</span>";
+                os += "<span class='value'>"+balance.value+"</span></div>";
+            }
+            os += "</div>"
             os += "<span class='name'>" + account.username + "</span>"
             os += "<span class='totalvalue'>"+account.totalvalue+"</span>"
             os += "<span class='address'>" + account.address+"</span>"

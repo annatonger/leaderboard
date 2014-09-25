@@ -22,3 +22,28 @@ div .podium#third {
     left:220px;
     width:100px;
 }
+div.account {
+    position:relative;
+    width:50%;
+}
+div.account:hover {
+    cursor:pointer;
+}
+div.account:hover span.name{
+    color:#3495F2;
+    text-decoration:underline; 
+}
+div.account:hover div.balances{
+    display:block;
+}
+div.balances {
+    border:thin solid red;
+    width:250px;
+    position:absolute;
+    top:0;
+    right:100px;
+    color:#FFF;
+    opacity:1; 
+    background:#000;
+    display:none;
+}
