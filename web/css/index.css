@@ -46,4 +46,6 @@ div.balances {
     opacity:1; 
     background:#000;
     display:none;
+    border-radius:15px;
+    padding:7px;
 }

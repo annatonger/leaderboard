@@ -18,7 +18,7 @@ initial.forEach(lines,function(line,idx,lib) {
         accounts.push({username:columns[0],address:columns[2],totalvalue:0}) 
     lib.done()
 },function() {
-    accounts = accounts.slice(0,11)
+//    accounts = accounts.slice(0,11)
     gettingbalances(0)
 })
 
@@ -102,7 +102,13 @@ var getSorted = function() {
 exports.getSorted = getSorted;
 var recalculate = function() {
     clearInterval(timerid);    
-    gettingbalances(0)
+    currTime = new Date().getTime()
+    next = currTime + hour;
+    for (var i = 0; i < accounts.length; i++) {
+        var acc = accounts[i];
+        acc.totalvalue = 0;
+    }
+    gettingbalances(0)    
     timerid = setInterval(function() {
         currTime = new Date().getTime()
         next = currTime + hour;
