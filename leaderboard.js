@@ -26,9 +26,14 @@ function gettingbalances (i) {
     console.log("Retrieving balance for "+ accounts[i].username+ " " + accounts[i].address + " (" + i + "/" +(accounts.length-1) + ")")
     if (accounts[i].address.length)
 request("http://localhost:5990/v1/accounts/"+accounts[i].address+"/balances", function(error,response,body){
-    body=JSON.parse(body)
-    console.log(body.balances)
-    accounts[i].balances=body.balances
+    if (body) {
+        body=JSON.parse(body)
+        console.log(body.balances)
+        accounts[i].balances=body.balances
+    } else {
+        accounts[i].balances = []
+    }
+    
     if (i<accounts.length-1)
         gettingbalances(i+1)
     else {
