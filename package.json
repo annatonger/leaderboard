@@ -20,7 +20,7 @@
     "browserify": "^5.12.0",
     "ecstatic": "^0.5.4",
     "optimist": "^0.6.1",
-    "queuelib": "^1.0.2",
+    "queuelib": "",
     "request": "^2.44.0",
     "response": "https://github.com/mikeal/response/archive/master.tar.gz"
   }
